@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Доступная Недвижимость | LUXE STAY{% endblock %}
+
+{% block content %}
+<div style="text-align: center; margin-bottom: 3rem;">
+    <h1 style="font-size: 3rem; margin-bottom: 1rem; background: linear-gradient(135deg, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Найдите идеальное место для отдыха</h1>
+    <p style="color: var(--text-muted); font-size: 1.2rem;">Эксклюзивные виллы, дома и апартаменты по всему миру.</p>
+</div>
+
+<div class="grid">
+    {% for property in properties %}
+        <div class="card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+            <!-- Плейсхолдер для картинки -->
+            <div style="height: 200px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; position: relative;">
+                {% if property.images.first %}
+                    <img src="{{ property.images.first.image_url }}" alt="{{ property.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                {% else %}
+                    <span style="color: var(--text-muted);">Нет фото</span>
+                {% endif %}
+                <div style="position: absolute; top: 1rem; right: 1rem; background: rgba(0,0,0,0.6); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.875rem; backdrop-filter: blur(4px);">
+                    {{ property.get_property_type_display }}
+                </div>
+            </div>
+            
+            <div style="padding: 1.5rem; flex: 1; display: flex; flex-direction: column;">
+                <h3 style="margin-top: 0; font-size: 1.5rem;">{{ property.title }}</h3>
+                <p style="color: var(--text-muted); flex: 1;">{{ property.address }}</p>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; border-top: 1px solid var(--glass-border); padding-top: 1rem;">
+                    <div>
+                        <span style="font-size: 1.25rem; font-weight: 700; color: var(--accent);">${{ property.price_per_night }}</span>
+                        <span style="color: var(--text-muted); font-size: 0.875rem;">/ ночь</span>
+                    </div>
+                    <a href="{% url 'properties:detail' property.id %}" class="btn btn-primary" style="padding: 0.5rem 1rem;">Подробнее</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="card" style="grid-column: 1 / -1; text-align: center; padding: 4rem;">
+            <h3 style="margin: 0; color: var(--text-muted);">К сожалению, пока нет доступной недвижимости.</h3>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
